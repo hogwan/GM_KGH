@@ -52,21 +52,21 @@ public:
 		ListNode* CurNode = nullptr;
 	};
 
-	class Riterator
+	class reverse_iterator
 	{
 		friend MyList;
 
 	public:
-		Riterator()
+		reverse_iterator()
 		{
 		}
 
-		Riterator(ListNode* _CurNode)
+		reverse_iterator(ListNode* _CurNode)
 			: CurNode(_CurNode)
 		{
 		}
 
-		bool operator!=(const Riterator& _Other)
+		bool operator!=(const reverse_iterator& _Other)
 		{
 			return CurNode != _Other.CurNode;
 		}
@@ -113,18 +113,18 @@ public:
 		return iterator(Start->Next);
 	}
 
-	Riterator rbegin()
+	reverse_iterator rbegin()
 	{
-		return Riterator(End->Prev);
+		return reverse_iterator(End->Prev);
 	}
 
 	iterator end()
 	{
 		return iterator(End);
 	}
-	Riterator rend()
+	reverse_iterator rend()
 	{
-		return Riterator(Start);
+		return reverse_iterator(Start);
 	}
 
 	// End의 Prev에 새로운 데이터를 넣겠다.
@@ -237,8 +237,8 @@ int main()
 			NewList.push_back(i);
 		}
 
-		MyList::Riterator rStartIter = NewList.rbegin();
-		MyList::Riterator rEndIter = NewList.rend();
+		MyList::reverse_iterator rStartIter = NewList.rbegin();
+		MyList::reverse_iterator rEndIter = NewList.rend();
 
 		for (
 			; rStartIter != rEndIter
