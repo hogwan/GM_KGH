@@ -76,7 +76,6 @@ public:
 			return CurNode->Data;
 		}
 
-		// 연산자 겹지정 중에 
 		void operator++()
 		{
 			CurNode = CurNode->Prev;
