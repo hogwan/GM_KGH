@@ -28,6 +28,11 @@ char ConsoleObject::GetRenderChar() const
 	return RenderChar;
 }
 
+void ConsoleObject::SetRenderChar(char _Ch)
+{
+    RenderChar = _Ch;
+}
+
 
 
 ConsoleObject* ConsoleObject::Collision(int _UpdateOrder)

@@ -15,7 +15,7 @@ void EngineCore::Start()
     while (EngineUpdate)
     {
         // 밀리세컨드 단위
-        Sleep(100);
+        Sleep(200);
 
         {
             std::map<int, ConsoleUpdater*>::iterator OrderStartIter = AllManager.begin();

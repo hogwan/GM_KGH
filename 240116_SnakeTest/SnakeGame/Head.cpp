@@ -11,56 +11,15 @@
 
 void Head::Update()
 {
-	int InputCount = _kbhit();
-	if (0 == InputCount)
-	{
-		return;
-	}
-
-	int Select = _getch();
-
 	int2 PrevPos = GetPos();
 	this->PrevPosition = PrevPos;
 
-	switch (Select)
+	AddPos(Dir);
+
+	if (GetPos().X == 0 || GetPos().X == GetCore()->Screen.GetScreenX() - 1
+		|| GetPos().Y == 0 || GetPos().Y == GetCore()->Screen.GetScreenY() - 1)
 	{
-	case 'A':
-	case 'a':
-		if (Dir != Right)
-		{
-			AddPos(Left);
-			Dir = Left;
-		}
-		break;
-	case 'S':
-	case 's':
-		if (Dir != Up)
-		{
-			AddPos(Down);
-			Dir = Down;
-		}
-		break;
-	case 'W':
-	case 'w':
-		if (Dir != Down)
-		{
-			AddPos(Up);
-			Dir = Up;
-		}
-		break;
-	case 'D':
-	case 'd':
-		if (Dir != Left)
-		{
-			AddPos(Right);
-			Dir = Right;
-		}
-		break;
-	case '1':
 		GetCore()->EngineEnd();
-		break;
-	default:
-		break;
 	}
 
 	Part* CurPart = this->Back;
@@ -71,7 +30,6 @@ void Head::Update()
 		CurPart->SetPos(FrontPart->PrevPosition);
 		CurPart = CurPart->Back;
 	}
-
 
 	if (nullptr == BodyManager::GetCurBody())
 	{
@@ -94,9 +52,74 @@ void Head::Update()
 		CurNode->Back = CurBody;
 		CurBody->Front = CurNode;
 		CurBody->SetPos(CurNode->PrevPosition);
-		CurBody->PrevPosition;
 
 		BodyManager::ResetBody();
 	}
+
+	int InputCount = _kbhit();
+	if (0 == InputCount)
+	{
+		return;
+	}
+	int Select = _getch();
+
+
+	switch (Select)
+	{
+	case 'A':
+	case 'a':
+		if (Dir != Right)
+		{
+			Dir = Left;
+		}
+		break;
+	case 'S':
+	case 's':
+		if (Dir != Up)
+		{
+			Dir = Down;
+		}
+		break;
+	case 'W':
+	case 'w':
+		if (Dir != Down)
+		{
+			Dir = Up;
+		}
+		break;
+	case 'D':
+	case 'd':
+		if (Dir != Left)
+		{
+			Dir = Right;
+		}
+		break;
+	case '1':
+		GetCore()->EngineEnd();
+		break;
+	default:
+		break;
+	}
+
 	
+}
+
+void Head::SetRenderChar(char _Ch)
+{
+	if (Dir == Up)
+	{
+		SetRenderChar('^');
+	}
+	else if (Dir == Down)
+	{
+		SetRenderChar('v');
+	}
+	else if (Dir == Left)
+	{
+		SetRenderChar('<');
+	}
+	else if (Dir == Right)
+	{
+		SetRenderChar('>');
+	}
 }

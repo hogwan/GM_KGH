@@ -16,10 +16,7 @@ public:
 	int2 GetPos() const;
 	char GetRenderChar() const;
 
-	inline void SetRenderChar(char _Ch)
-	{
-		RenderChar = _Ch;
-	}
+	virtual void SetRenderChar(char _Ch);
 
 	inline void SetPos(const int2& _Pos)
 	{

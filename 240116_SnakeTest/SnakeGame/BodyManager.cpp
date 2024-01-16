@@ -20,9 +20,9 @@ void BodyManager::Update()
 	std::list<int2> AllRange;
 	// 00, 01, 10, 11
 	{
-		for (int y = 0; y < ScreenY; y++)
+		for (int y = 0; y < ScreenY-2; y++)
 		{
-			for (int x = 0; x < ScreenX; x++)
+			for (int x = 0; x < ScreenX-2; x++)
 			{
 				AllRange.push_back({ x, y });
 			}
@@ -65,7 +65,7 @@ void BodyManager::Update()
 
 		// 랜덤한 위치가 지정됐으므로
 		CurBody = GetCore()->CreateObject<Body>();
-		CurBody->SetRenderChar('#');
+		CurBody->SetRenderChar('@');
 		CurBody->SetPos(CreateBodyPos);
 	}
 }
