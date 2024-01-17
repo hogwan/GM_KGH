@@ -42,19 +42,19 @@ void ConsoleScreen::CreateScreen(/*&NewScreen => this, */int _ScreenX, int _Scre
 
 	// std::vector<char>* Ptr = new std::vector<char>[ScreenY];
 
-	ScreenData.resize(ScreenY);
+	ScreenData.resize(ScreenY+BufferSize*2);
 	// ScreenData = new char* [ScreenY];
-	if (0 == ScreenData.size())
+	if (BufferSize*2 >= ScreenData.size())
 	{
 		MsgBoxAssert("스크린 생성에 실패했습니다. if (nullptr == ScreenData)");
 	}
 
-	for (int y = 0; y < ScreenY; y++)
+	for (int y = 0; y < ScreenY+BufferSize*2; y++)
 	{
-		ScreenData[y].resize(ScreenX + 2);
+		ScreenData[y].resize(ScreenX + BufferSize*2 + 2);
 		// ScreenData[y] = new char[ScreenX + 2] {0,};
 
-		if (0 == ScreenData[y].size())
+		if (BufferSize*2 >= ScreenData[y].size())
 		{
 			MsgBoxAssert("스크린 생성에 실패했습니다. if (nullptr == ScreenData[y])");
 		}
@@ -93,37 +93,29 @@ void ConsoleScreen::ReleaseScreen()
 
 void ConsoleScreen::SetChar(const ConsoleObject& _Object)
 {
-	SetChar(_Object.GetPos(), _Object.GetRenderChar());
+	SetChar(_Object.GetPos(), _Object.GetScale(), _Object.GetRenderChar());
 }
 
 void ConsoleScreen::SetChar(const ConsoleObject* _Object)
 {
-	SetChar(_Object->GetPos(), _Object->GetRenderChar());
+	SetChar(_Object->GetPos(), _Object->GetScale(), _Object->GetRenderChar());
 }
 
-void ConsoleScreen::SetChar(const int2& _Pos, char _Char)
+void ConsoleScreen::SetChar(const int2& _Pos, const int _Scale, char _Char)
 {
-	if (0 > _Pos.Y)
-	{
-		return;
-	}
+	int2 Pos = _Pos + int2{ BufferSize, BufferSize };
+	int Scale = _Scale;
+	int RightPadding = Scale / 2;
+	int LeftPadding = (Scale % 2 == 1) ? RightPadding : RightPadding-1;
 
-	if (0 > _Pos.X)
-	{
-		return;
-	}
 
-	if (ScreenX <= _Pos.X)
+	for (int y = Pos.Y - LeftPadding; y <= Pos.Y + RightPadding; y++)
 	{
-		return;
+		for (int x = Pos.X - LeftPadding; x <= Pos.X + RightPadding; x++)
+		{
+			ScreenData[y][x] = _Char;
+		}
 	}
-
-	if (ScreenY <= _Pos.Y)
-	{
-		return;
-	}
-
-	ScreenData[_Pos.Y][_Pos.X] = _Char;
 }
 
 void ConsoleScreen::ClearScreen()
@@ -136,11 +128,11 @@ void ConsoleScreen::ClearScreen()
 	// char* *ScreenData
 	// char **ScreenData
 
-	for (int y = 0; y < ScreenY; y++)
+	for (int y = BufferSize; y < ScreenY + BufferSize; y++)
 	{
-		for (int x = 0; x < ScreenX; x++)
+		for (int x = BufferSize; x < ScreenX + BufferSize; x++)
 		{
-			if (y == 0 || x == 0 || x == ScreenX - 1 || y == ScreenY - 1)
+			if (y == BufferSize || x == BufferSize || x == ScreenX + BufferSize - 1 || y == ScreenY + BufferSize - 1)
 			{
 				ScreenData[y][x] = '#';
 			}
@@ -149,7 +141,7 @@ void ConsoleScreen::ClearScreen()
 				ScreenData[y][x] = ' ';
 			}
 		}
-		ScreenData[y][ScreenX] = '\n';
+		ScreenData[y][ScreenX + BufferSize] = '\n';
 	}
 }
 
@@ -157,15 +149,17 @@ void ConsoleScreen::PrintScreen()
 {
 	system("cls");
 
-	for (int y = 0; y < ScreenY; y++)
+	printf_s("SizeUp에 필요한 개수 : 4\n");
+	printf_s("Size를 4까지 늘리면 승리\n");
+	for (int y = BufferSize; y < ScreenY+ BufferSize; y++)
 	{
-		if (0 == ScreenData[y].size())
+		if (BufferSize >= ScreenData[y].size())
 		{
 			MsgBoxAssert("존재하지 않은 라인을 출력하려고 했습니다");
 		}
 
 		std::vector<char>& Vector = ScreenData[y];
-		char& FirstChar = Vector[0];
+		char& FirstChar = Vector[BufferSize];
 		char* PrintPtr = &FirstChar;
 		printf_s(PrintPtr);
 	}

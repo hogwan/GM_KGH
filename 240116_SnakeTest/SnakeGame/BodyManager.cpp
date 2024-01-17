@@ -20,9 +20,9 @@ void BodyManager::Update()
 	std::list<int2> AllRange;
 	// 00, 01, 10, 11
 	{
-		for (int y = 0; y < ScreenY-2; y++)
+		for (int y = 5; y < ScreenY-7; y++)
 		{
-			for (int x = 0; x < ScreenX-2; x++)
+			for (int x = 5; x < ScreenX-7; x++)
 			{
 				AllRange.push_back({ x, y });
 			}

@@ -23,6 +23,11 @@ int2 ConsoleObject::GetPos() const
 	return Pos;
 }
 
+int ConsoleObject::GetScale() const
+{
+    return Scale;
+}
+
 char ConsoleObject::GetRenderChar() const
 {
 	return RenderChar;

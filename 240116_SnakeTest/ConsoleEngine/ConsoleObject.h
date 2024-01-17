@@ -14,6 +14,7 @@ public:
 	virtual ~ConsoleObject();
 
 	int2 GetPos() const;
+	int GetScale() const;
 	char GetRenderChar() const;
 
 	virtual void SetRenderChar(char _Ch);
@@ -27,6 +28,11 @@ public:
 	{
 		Pos += _Dir;
 	}
+	inline void SetScale(const int _Scale)
+	{
+		Scale = _Scale;
+	}
+	//inline void SetBufferSize(const int )
 
 	template<typename EnumType>
 	ConsoleObject* Collision(EnumType _UpdateOrder)
@@ -42,6 +48,7 @@ protected:
 private:
 
 	int2 Pos = { 0, 0 };
+	int Scale = 1;
 	char RenderChar = '@';
 };
 

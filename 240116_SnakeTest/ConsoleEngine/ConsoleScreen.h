@@ -39,7 +39,7 @@ public:
 	// 전방선언
 	void SetChar(const class ConsoleObject& _Object);
 	void SetChar(const class ConsoleObject* _Object);
-	void SetChar(const int2& _Pos, char _Char);
+	void SetChar(const int2& _Pos,const int _Scale, char _Char);
 
 	inline int GetScreenX() 
 	{ 
@@ -51,6 +51,11 @@ public:
 		return ScreenY; 
 	}
 
+	inline void SetBufferSize(const int _Size)
+	{
+		BufferSize = _Size;
+	}
+
 protected:
 
 private:
@@ -60,6 +65,7 @@ private:
 	int ScreenY = -1;
 
 	std::vector<std::vector<char>> ScreenData;
+	int BufferSize = 5;
 	// char** ScreenData = nullptr; // new int(); => 이걸 언제할지를 프로그래머가 정할수가 있습니다.
 	          // 최후최후에 
 			  // 내가 원하는 순간 생성을 할수 있다는것.
