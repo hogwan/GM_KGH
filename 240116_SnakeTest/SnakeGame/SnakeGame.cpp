@@ -16,7 +16,7 @@ enum class SnakeOrder
 int main()
 {
     EngineCore EngineCore;
-    EngineCore.Init({ 20, 20});
+    EngineCore.Init({ 50, 25});
 
     {
         // Player* NewObject = new Player();

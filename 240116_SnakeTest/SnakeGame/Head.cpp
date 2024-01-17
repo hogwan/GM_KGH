@@ -3,6 +3,7 @@
 #include <ConsoleEngine/EngineCore.h>
 #include "BodyManager.h"
 #include "Body.h"
+#include <vector>
 
 // 
 // 1. 내가 특정 방향으로 진행했다면 다음 입력때는 그 반대방향으로는 갈수가 없다.
@@ -22,14 +23,35 @@ void Head::Update()
 		GetCore()->EngineEnd();
 	}
 
+	std::vector<int2> MyBodyPositionVector;
+	//바디들이 헤드를 따라다니는 로직
 	Part* CurPart = this->Back;
 	while (CurPart)
 	{
+		//프론트의 이전위치를 기억해서 이동
 		Part* FrontPart = CurPart->Front;
 		CurPart->PrevPosition = CurPart->GetPos();
 		CurPart->SetPos(FrontPart->PrevPosition);
+
+		//바디들을 바디벡터에 넣음
+		int2 CurPosition = CurPart->GetPos();
+		MyBodyPositionVector.push_back(CurPosition);
+
 		CurPart = CurPart->Back;
 	}
+
+	//자기 바디 물면 종료
+	std::vector<int2>::iterator StartIter = MyBodyPositionVector.begin();
+	std::vector<int2>::iterator EndIter = MyBodyPositionVector.end();
+	for (; StartIter != EndIter; ++StartIter)
+	{
+		int2 BodyPiecePosition = *StartIter;
+		if (GetPos() == BodyPiecePosition)
+		{
+			GetCore()->EngineEnd();
+		}
+	}
+
 
 	if (nullptr == BodyManager::GetCurBody())
 	{
@@ -71,6 +93,7 @@ void Head::Update()
 		if (Dir != Right)
 		{
 			Dir = Left;
+			SetRenderChar('<');
 		}
 		break;
 	case 'S':
@@ -78,6 +101,7 @@ void Head::Update()
 		if (Dir != Up)
 		{
 			Dir = Down;
+			SetRenderChar('v');
 		}
 		break;
 	case 'W':
@@ -85,6 +109,7 @@ void Head::Update()
 		if (Dir != Down)
 		{
 			Dir = Up;
+			SetRenderChar('^');
 		}
 		break;
 	case 'D':
@@ -92,6 +117,7 @@ void Head::Update()
 		if (Dir != Left)
 		{
 			Dir = Right;
+			SetRenderChar('>');
 		}
 		break;
 	case '1':
@@ -104,22 +130,3 @@ void Head::Update()
 	
 }
 
-void Head::SetRenderChar(char _Ch)
-{
-	if (Dir == Up)
-	{
-		SetRenderChar('^');
-	}
-	else if (Dir == Down)
-	{
-		SetRenderChar('v');
-	}
-	else if (Dir == Left)
-	{
-		SetRenderChar('<');
-	}
-	else if (Dir == Right)
-	{
-		SetRenderChar('>');
-	}
-}

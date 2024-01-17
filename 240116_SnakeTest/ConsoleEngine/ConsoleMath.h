@@ -42,6 +42,11 @@ public:
 		return { X + _Other.X, Y + _Other.Y };
 	}
 
+	int2 operator+(const int _Other) const
+	{
+		return { X + _Other, Y + _Other };
+	}
+
 	void operator+=(const int2& _Other)
 	{
 		X += _Other.X;
